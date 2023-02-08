@@ -4,16 +4,19 @@ package edu.security.jpa.config.auth;
 
 import edu.security.jpa.entity.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.stream.Collectors;
+
 // 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 진행시킨다.
 // 로그인을 진해잉 완료가 되면 시큐리티 session을 만들어 준다.
 // 오브젝트 타입 -> Authentication 타입 객체
 // Authentication 안에 User정보가 있어야 됨.
-// User오브젝트타입 -> UserDetails 타입 객체
-// Security Session -> Authentication => UserDetails(PrincipalDetails)
+// User오브젝트타입 -> PrincipalDetails 타입 객체
+// Security Session -> Authentication => PrincipalDetails(PrincipalDetails)
 public class PrincipalDetails implements UserDetails {
 
     private User user;
@@ -25,14 +28,9 @@ public class PrincipalDetails implements UserDetails {
     //해당 User의 권한을 리턴하는 곳
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayDeque<>();
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return user.getRole();
-            }
-        });
-        return collection;
+        return user.getRoles().stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override

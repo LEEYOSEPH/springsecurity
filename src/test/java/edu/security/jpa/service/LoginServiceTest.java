@@ -22,7 +22,7 @@ class LoginServiceTest {
         String username = "userB";
 
         //when
-       // UserDetails userDetails = loginService.loadUserByUsername(username);
+       // PrincipalDetails userDetails = loginService.loadUserByUsername(username);
 
         //then
        // assertThat(username).isEqualTo(userDetails.getUsername());

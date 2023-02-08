@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService implements UserDetailsService {
+public class CustomUserDetailService  implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -20,7 +20,7 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         if (user != null) {
             System.out.println("UserService.loadUserByUsername : " + username);
             return new PrincipalDetails(user);

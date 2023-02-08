@@ -1,6 +1,7 @@
 package edu.security.jpa.controller;
 
 import edu.security.jpa.dto.JoinUserRequestDto;
+import edu.security.jpa.dto.UserLoginRequestDto;
 import edu.security.jpa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiController {
 
     private final UserService userService;
+
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
@@ -30,9 +32,9 @@ public class ApiController {
         return "manager";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "loginPage";
+    @PostMapping("/login")
+    public String login(@RequestBody UserLoginRequestDto loginRequestDto) {
+        return userService.login(loginRequestDto);
     }
 
     @PostMapping("/join")

@@ -2,7 +2,10 @@ package edu.security.jpa.dto;
 
 import edu.security.jpa.entity.User;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,15 +18,15 @@ public class JoinUserRequestDto {
     private String password;
     private String email;
     private String hobby;
-    private String role;
+    private List<String> roles = new ArrayList<>();
 
     @Builder
-    public JoinUserRequestDto(String username, String password, String email, String hobby,String role) {
+    public JoinUserRequestDto(String username, String password, String email, String hobby) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.hobby = hobby;
-        this.role = role;
+        this.roles = Collections.singletonList("ROLE_USER");
     }
 
     public User toEntity() {
@@ -32,7 +35,7 @@ public class JoinUserRequestDto {
                 .password(password)
                 .email(email)
                 .hobby(hobby)
-                .role(role)
+                .roles(roles)
                 .build();
     }
 }
