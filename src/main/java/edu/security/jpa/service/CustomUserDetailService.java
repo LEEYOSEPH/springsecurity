@@ -1,13 +1,16 @@
 package edu.security.jpa.service;
 
-import edu.security.jpa.config.auth.PrincipalDetails;
 import edu.security.jpa.entity.User;
 import edu.security.jpa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +22,16 @@ public class CustomUserDetailService  implements UserDetailsService {
     // /login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC 되어있는 loadUserByUsername 함수가 실행
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       return userRepository.findByUsername(username).map(this::createUserDetails).orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+    }
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-        if (user != null) {
-            System.out.println("UserService.loadUserByUsername : " + username);
-            return new PrincipalDetails(user);
-        }
-        return null;
+    private UserDetails createUserDetails(User user) {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthority().toString());
+
+        return new org.springframework.security.core.userdetails.User(
+                String.valueOf(user.getId()),
+                user.getPassword(),
+                Collections.singleton(grantedAuthority)
+        );
     }
 }

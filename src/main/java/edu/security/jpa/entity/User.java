@@ -1,5 +1,6 @@
 package edu.security.jpa.entity;
 
+import edu.security.jpa.common.Authority;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,23 +23,14 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    private String email;
-    private String hobby;
-    @ElementCollection(fetch = FetchType.EAGER) //roles 컬렉션
-    private List<String> roles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     @Builder
-    public User(Long id, String username, String password, String email, String hobby, List<String> roles) {
-        this.id = id;
+    public User( String username, String password,Authority authority) {
         this.username = username;
         this.password = password;
-        this.email = email;
-        this.hobby = hobby;
-        this.roles = roles;
+        this.authority = authority;
     }
 
-    // 비밀번호 암호화
-    public void encodePassword(PasswordEncoder encoder) {
-        this.password = encoder.encode(this.password);
-    }
 }
