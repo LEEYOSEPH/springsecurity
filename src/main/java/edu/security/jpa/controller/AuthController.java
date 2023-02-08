@@ -6,7 +6,6 @@ import edu.security.jpa.dto.UserResponseDto;
 import edu.security.jpa.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "jhe";
-    }
+
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signup(@RequestBody UserLoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authService.signup(loginRequestDto));
