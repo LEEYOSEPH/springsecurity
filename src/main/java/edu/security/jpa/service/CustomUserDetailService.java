@@ -18,7 +18,6 @@ public class CustomUserDetailService  implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    // 시큐리티 설정에서 loginProcessingUrl("/login");
     // /login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC 되어있는 loadUserByUsername 함수가 실행
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -27,7 +26,6 @@ public class CustomUserDetailService  implements UserDetailsService {
 
     private UserDetails createUserDetails(User user) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getAuthority().toString());
-
         return new org.springframework.security.core.userdetails.User(
                 String.valueOf(user.getId()),
                 user.getPassword(),
