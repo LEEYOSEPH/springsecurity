@@ -21,7 +21,9 @@ public class CustomUserDetailService  implements UserDetailsService {
     // /login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC 되어있는 loadUserByUsername 함수가 실행
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       return userRepository.findByUsername(username).map(this::createUserDetails).orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+       return userRepository.findByUsername(username)
+               .map(this::createUserDetails)
+               .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
     private UserDetails createUserDetails(User user) {
